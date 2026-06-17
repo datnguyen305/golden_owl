@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cat vs Dog Classifier</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section class="panel">
+        <div class="header">
+          <p class="eyebrow">ViT-Small image classifier</p>
+          <h1>Cat vs Dog Classifier</h1>
+        </div>
+
+        <label class="api-field">
+          <span>Render API URL</span>
+          <input id="apiUrl" type="url" placeholder="https://your-render-service.onrender.com" />
+        </label>
+
+        <label class="dropzone" for="imageInput">
+          <input id="imageInput" type="file" accept="image/*" />
+          <span class="dropzone-title">Choose an image</span>
+          <span class="dropzone-subtitle">JPG, PNG, or WEBP</span>
+        </label>
+
+        <div class="preview-wrap">
+          <img id="preview" alt="" />
+        </div>
+
+        <button id="predictButton" type="button" disabled>Classify</button>
+
+        <section id="result" class="result" aria-live="polite">
+          <div class="result-label">Waiting for image</div>
+          <div class="bars">
+            <div>
+              <div class="bar-row">
+                <span>Cat</span>
+                <span id="catScore">0%</span>
+              </div>
+              <div class="bar"><span id="catBar"></span></div>
+            </div>
+            <div>
+              <div class="bar-row">
+                <span>Dog</span>
+                <span id="dogScore">0%</span>
+              </div>
+              <div class="bar"><span id="dogBar"></span></div>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script src="./script.js"></script>
+  </body>
+</html>

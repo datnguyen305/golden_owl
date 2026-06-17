@@ -1,0 +1,10 @@
+[build]
+  base = "exercise_1/frontend"
+  publish = "."
+  command = "echo 'No build step'"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"

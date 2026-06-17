@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.DS_Store
+exercise_1/.gradio/
+exercise_1/models_checkpoint/*.pt
+!exercise_1/models_checkpoint/vit_small_head.pt

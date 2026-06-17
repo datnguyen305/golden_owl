@@ -1,0 +1,15 @@
+This is the instruction for AI intern assignment at Golden Owl. You will build a simple Image Classification model base on Teachable Machine or Tensorflow or Pytorch.
+
+You will do “Classify dog and cat images”. For example:
+
+In this exercise, you need to write a program in Python to classify dog and cat images. For dataset that you can collect on internet
+
+You can use teachable machine/your computer for training model
+
+DEMO
+
+Requirements
+Your program gets the input as image file and print the output.
+Describe briefly your solution in a report (i.e: your pipeline, algorithms that we use, remaining problem as well as ideas for improvements,...).
+Your solution will be evaluated on our private dataset. So, you need to submit your source and the report.
+Do not forget to write a README.md (i.e: environment requirements, how to run) to guide us to reproduce your code easily.
