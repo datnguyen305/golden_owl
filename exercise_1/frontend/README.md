@@ -5,11 +5,11 @@ This is a static frontend for the Render inference API.
 Netlify settings:
 
 - Base directory: `exercise_1/frontend`
-- Build command: leave empty
+- Build command: `echo 'No build step'`
 - Publish directory: `.`
 
-After deploying the Render API, paste its URL into the input field, for example:
+The frontend uses this Render API URL by default:
 
 ```text
-https://cat-dog-classifier-api.onrender.com
+https://golden-owl-demo.onrender.com
 ```

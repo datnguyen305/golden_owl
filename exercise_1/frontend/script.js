@@ -8,11 +8,10 @@ const catScore = document.getElementById("catScore");
 const dogScore = document.getElementById("dogScore");
 const catBar = document.getElementById("catBar");
 const dogBar = document.getElementById("dogBar");
+const dropzone = document.querySelector(".dropzone");
 
-const savedApiUrl = localStorage.getItem("renderApiUrl");
-if (savedApiUrl) {
-  apiUrlInput.value = savedApiUrl;
-}
+const DEFAULT_API_URL = "https://golden-owl-demo.onrender.com";
+apiUrlInput.value = DEFAULT_API_URL;
 
 function formatPercent(value) {
   return `${Math.round(value * 100)}%`;
@@ -36,11 +35,13 @@ imageInput.addEventListener("change", () => {
   if (!file) {
     preview.removeAttribute("src");
     previewWrap.classList.remove("has-image");
+    dropzone.classList.remove("is-compact");
     return;
   }
 
   preview.src = URL.createObjectURL(file);
   previewWrap.classList.add("has-image");
+  dropzone.classList.add("is-compact");
 });
 
 apiUrlInput.addEventListener("input", () => {
