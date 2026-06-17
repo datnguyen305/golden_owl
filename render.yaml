@@ -10,8 +10,8 @@ services:
       - key: PYTHON_VERSION
         value: 3.11.9
       - key: MODEL_NAME
-        value: vit_small_patch16_224
+        value: mobilenet_v3_small
       - key: CHECKPOINT_PATH
-        value: ../models_checkpoint/vit_small_head.pt
+        value: ../models_checkpoint/mobilenet_v3_small_head.pt
       - key: CORS_ORIGINS
         value: "*"

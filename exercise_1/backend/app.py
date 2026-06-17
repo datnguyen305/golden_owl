@@ -7,15 +7,15 @@ import torch
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from PIL import Image, UnidentifiedImageError
-from torchvision import transforms
+from torchvision import models, transforms
 
 
 IMG_SIZE = 224
-MODEL_NAME = os.getenv("MODEL_NAME", "vit_small_patch16_224")
+MODEL_NAME = os.getenv("MODEL_NAME", "mobilenet_v3_small")
 CHECKPOINT_PATH = Path(
     os.getenv(
         "CHECKPOINT_PATH",
-        Path(__file__).resolve().parents[1] / "models_checkpoint" / "vit_small_head.pt",
+        Path(__file__).resolve().parents[1] / "models_checkpoint" / "mobilenet_v3_small_head.pt",
     )
 )
 CLASS_NAMES = ["cat", "dog"]
@@ -62,7 +62,16 @@ def extract_state_dict(checkpoint):
 
 
 def create_model():
-    classifier = timm.create_model(MODEL_NAME, pretrained=False, num_classes=len(CLASS_NAMES))
+    if MODEL_NAME == "mobilenet_v3_small":
+        classifier = models.mobilenet_v3_small(weights=None)
+        classifier.classifier[-1] = torch.nn.Linear(
+            classifier.classifier[-1].in_features, len(CLASS_NAMES)
+        )
+    elif MODEL_NAME == "vit_small_patch16_224":
+        classifier = timm.create_model(MODEL_NAME, pretrained=False, num_classes=len(CLASS_NAMES))
+    else:
+        raise ValueError(f"Unsupported MODEL_NAME: {MODEL_NAME}")
+
     checkpoint = load_checkpoint(CHECKPOINT_PATH)
     classifier.load_state_dict(extract_state_dict(checkpoint))
     classifier.to(DEVICE)
@@ -70,10 +79,11 @@ def create_model():
     return classifier
 
 
-@app.on_event("startup")
-def startup_event():
+def get_model():
     global model
-    model = create_model()
+    if model is None:
+        model = create_model()
+    return model
 
 
 @app.get("/health")
@@ -88,17 +98,15 @@ def health() -> Dict[str, str]:
 
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
-    if model is None:
-        raise HTTPException(status_code=503, detail="Model is still loading")
-
     try:
         image = Image.open(file.file).convert("RGB")
     except UnidentifiedImageError as exc:
         raise HTTPException(status_code=400, detail="Uploaded file is not a valid image") from exc
 
+    classifier = get_model()
     with torch.no_grad():
         x = preprocess(image).unsqueeze(0).to(DEVICE)
-        logits = model(x)
+        logits = classifier(x)
         probs = torch.softmax(logits, dim=1)[0].detach().cpu()
 
     scores = {CLASS_NAMES[i]: float(probs[i]) for i in range(len(CLASS_NAMES))}
